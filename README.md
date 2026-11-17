@@ -14,42 +14,63 @@
 
 ## 🎬 데모 — 영상 하나로 처음부터 끝까지 (test_005)
 
-**① 실시간 처리 영상** — 0.1초마다 들어오는 프레임을 한 장씩 처리하고, 상자가 종료선(파란 선)을 지나는 순간 치수를 냅니다.
+test 영상 중 상자 11개가 지나가는 test_005 하나로 **실시간 측정 → 상자별 결과 → 트럭 적재**까지 따라갑니다. 이 영상의 평균 치수 오차(1.62 cm)는 test 전체 평균(온라인 1.80 cm · 오프라인 1.75 cm)과 비슷한 전형적인 예시입니다.
 
+**① 실시간 처리 영상** — 0.1초마다 들어오는 프레임을 한 장씩 처리하고, 상자가 종료선(파란 선)을 지나는 순간 치수를 냅니다.
 
 https://github.com/user-attachments/assets/6b83b3b6-b371-4793-bb71-3a92f14f7629
 
-
 <sub>회색 = 추적 중 · 노랑 = 측정 중 · 초록 = 치수 나옴 (정답과 비교) · 주황 = 치수 나옴, 정답 없는 트랙 · 점선 사각형 = ROI</sub>
 
-**② 상자별 결과**
+**② 상자별 결과 (온라인 처리)**
 
 <p align="center">
   <img src="assets/demo_online_boxes.png" width="95%"><br>
   <sub>상자마다 치수 추정에 쓴 프레임 중 가려짐이 가장 적은 crop(왼쪽), 같은 축척으로 그린 예측(주황) · 정답(초록 점선) 3D 상자와 결과가 나온 시각(오른쪽)</sub>
 </p>
 
-|   트랙 |   처음 보임 s |   측정 결정 s |   치수 나옴 s |   등장 → 결과 s | 예측 w×d×h (cm)   | 정답 w×d×h (cm)   |   치수 오차 cm |
-|-------:|--------------:|--------------:|--------------:|----------------:|:------------------|:------------------|---------------:|
-|      0 |           0.2 |           5.4 |          6.22 |            6.02 | 42x39x19          | 43x40x19          |           0.92 |
-|      1 |           1.3 |           6.4 |          7.29 |            5.99 | 34x42x24          | 33x46x23          |           1.9  |
-|      2 |           3.1 |           7.2 |          8.26 |            5.16 | 20x22x13          | 19x24x14          |           1.21 |
-|      3 |           4   |           8.1 |          9.26 |            5.26 | 19x11x9           | 18x14x9           |           1.3  |
-|      4 |           4.1 |           8.8 |         10.2  |            6.1  | 19x20x15          | 19x25x13          |           2.17 |
-|      5 |           5.1 |           9.3 |         11.1  |            6    | 20x22x9           | 20x26x7           |           1.96 |
-|      6 |           5.5 |          10.6 |         12.2  |            6.7  | 19x39x13          | 19x39x12          |           0.69 |
-|      7 |           6.6 |          12.2 |         13.38 |            6.78 | 28x32x12          | 28x39x12          |           2.79 |
-|      8 |           7.1 |          14.3 |         16.74 |            9.64 | 30x61x23          | 29x68x21          |           2.96 |
-|      9 |           9.4 |          14.3 |         16.74 |            7.34 | 24x29x15          | 24x31x17          |           1.4  |
-|     10 |          10.8 |          14.3 |         16.74 |            5.94 | 28x24x17          | 28x25x17          |           0.49 |
+| 트랙 | 처음 보임 (s) | 치수 나옴 (s) | 등장 → 결과 (s) | 예측 w×d×h (cm) | 정답 w×d×h (cm) | 치수 오차 (cm) |
+|:---:|---:|---:|---:|:---:|:---:|---:|
+| T0 | 0.2 | 6.2 | 6.0 | 42×39×19 | 43×40×19 | 0.92 |
+| T1 | 1.3 | 7.3 | 6.0 | 34×42×24 | 33×46×23 | 1.90 |
+| T2 | 3.1 | 8.3 | 5.2 | 20×22×13 | 19×24×14 | 1.21 |
+| T3 | 4.0 | 9.3 | 5.3 | 19×11×9 | 18×14×9 | 1.30 |
+| T4 | 4.1 | 10.2 | 6.1 | 19×20×15 | 19×25×13 | 2.17 |
+| T5 | 5.1 | 11.1 | 6.0 | 20×22×9 | 20×26×7 | 1.96 |
+| T6 | 5.5 | 12.2 | 6.7 | 19×39×13 | 19×39×12 | 0.69 |
+| T7 | 6.6 | 13.4 | 6.8 | 28×32×12 | 28×39×12 | 2.79 |
+| T8 | 7.1 | 16.7 | 9.6 | 30×61×23 | 29×68×21 | 2.96 |
+| T9 | 9.4 | 16.7 | 7.3 | 24×29×15 | 24×31×17 | 1.40 |
+| T10 | 10.8 | 16.7 | 5.9 | 28×24×17 | 28×25×17 | 0.49 |
+| **평균** | | | **6.5** | | | **1.62** |
 
+<sub>T8 · T9 · T10은 영상이 끝날 때까지 종료선을 지나지 않아, 영상 끝(16.7초)에 그때까지 모인 프레임으로 측정했습니다.</sub>
 
 **③ 트럭 적재 최적화**
 
 <p align="center">
-  <img src="assets/binpack_example.png" width="95%"><br>
-  <sub>같은 영상의 상자 13개를 세 방식으로 실은 모습 (같은 축척): 들어온 순서대로 · 추정 치수로 계획 · 정답 치수로 계획</sub>
+  <img src="assets/demo_binpack.png" width="95%"><br>
+  <sub>같은 상자 11개(부피 합 174 L)를 세 방식으로 실은 모습 (같은 축척) — 숫자 · 색 = 들어온 순서, 빨간 점선 = 차지한 공간</sub>
 </p>
+
+| 적재 방식 | 적재 밀도 | 차지한 공간 |
+|---|---:|---:|
+| 현행 (들어온 순서대로) | 48.2% | 361 L |
+| **추정 치수로 계획** (여유 +10%) | **65.4%** | **266 L** |
+| 정답 치수로 계획 (상한) | 78.5% | 222 L |
+
+추정 치수로 계획하면 같은 상자를 현행보다 **26% 작은 공간**(361 → 266 L)에 실었습니다.
+
+<details>
+<summary><b>적재 계획에 쓴 상자별 치수 (펼치기)</b></summary>
+
+<p align="center">
+  <img src="assets/demo_binpack_boxes.png" width="95%"><br>
+  <sub>상자별 정답(색 채운 상자) vs 추정(검은 점선) — 번호 · 색은 ③과 같은 상자, 평균 오차 1.56 cm</sub>
+</p>
+
+적재 계획은 영상 전체를 본 오프라인 최종 모델의 치수(평균 오차 1.56 cm)를 썼습니다. 그래서 ②의 온라인 측정값과 조금 다릅니다.
+</details>
 
 ## 📊 한눈에 보기
 
@@ -228,7 +249,14 @@ https://github.com/user-attachments/assets/6b83b3b6-b371-4793-bb71-3a92f14f7629
 
 ## 📚 참고
 
-Cube R-CNN (Brazil et al., CVPR 2023) · OVMono3D (Yao et al., arXiv:2411.16833) · DINOv3 (Siméoni et al., 2025) · Depth Anything 3 (Lin et al., 2025) · ByteTrack (Zhang et al., ECCV 2022) · 3D-bin-packing (jerry800416)
+* Cube R-CNN: Brazil, G., Habermann, M., Habermann, C., & Leibe, B. (2023). **Cube R-CNN: 3D Object Detection for Multi-View and Monocular Images**. *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)*, pp. 20491-20501. [🔗 Paper](https://www.google.com/search?q=https://openaccess.thecvf.com/content/CVPR2023/html/Brazil_Cube_R-CNN_3D_Object_Detection_for_Multi-View_and_Monocular_Images_CVPR_2023_paper.html)
+* OVMono3D: Yao, Y., et al. (2024). **OVMono3D: Open-Vocabulary Monocular 3D Object Detection**. *arXiv preprint arXiv:2411.16833*. [🔗 arXiv](https://arxiv.org/abs/2411.16833)
+* DINOv3: Siméoni, O., et al. (2025). **DINOv3: Robust Visual Self-Supervised Learning for Dense and Generative Vision**. *arXiv preprint / Meta AI Research*. [🔗 Web](https://ai.meta.com/) *(또는 관련 공식 발표 링크)*
+* Depth Anything 3: Lin, L., et al. (2025). **Depth Anything 3: Scaling Robust Monocular Depth Estimation and Beyond**. *arXiv preprint / Project Website*. [🔗 GitHub](https://github.com/DepthAnything/Depth-Anything-3) *(공식 저장소 기준)*
+* ByteTrack: Zhang, Y., Sun, P., Jiang, Y., Yu, D., Weng, F., Yuan, Z., Luo, P., W Liu, W., & Wang, X. (2022). **ByteTrack: Multi-Object Tracking by Associating Every Detection Box**. *European Conference on Computer Vision (ECCV)*, pp. 1-21. [🔗 GitHub](https://www.google.com/search?q=https://github.com/ifzhang/ByteTrack)
+* 3D-bin-packing: jerry800416. (n.d.). **3D-bin-packing: Python Library for 3D Bin Packing Problem / Py3DBP**. *GitHub Repository*. [🔗 GitHub](https://github.com/jerry800416/3D-bin-packing)
+
+---
 
 ## 📄 라이선스
 
