@@ -4,26 +4,45 @@
 
 **기하 스케일 분리와 형태비 학습에 기반한 단안 CCTV 화물 치수 추정**
 
-소프트웨어융합 캡스톤디자인 · 이찬  · 2026
-
 <!-- 배지: GitHub 아이디/저장소 이름으로 바꾸기 -->
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/notebooks/03_sizing_MAIN_offline_test.ipynb)
 &nbsp;[📄 최종 보고서](docs/report.pdf)
 
 </div>
 
-일반 CCTV 한 대의 영상과 렌즈 focal만으로 컨베이어 위 상자의 **가로 · 세로 · 높이(w · d · h)** 를 추정하고, 추정한 치수로 트럭 적재 순서를 계획합니다.
+일반 CCTV 한 대의 영상과 렌즈 focal만으로 컨베이어 위 상자의 **가로 · 세로 · 높이(w · d · h)** 를 추정하고, 추정한 치수로 **트럭 적재를 최적화**합니다 (3D bin packing).
 
-## 🎬 데모
+## 🎬 데모 — 영상 하나로 처음부터 끝까지 (test_033)
 
-<!-- 여기에 데모 영상을 넣으세요 (HOWTO_media.md 1번 참고).
-     GitHub 웹에서 README 편집 → mp4 파일을 이 줄 아래로 끌어다 놓으면 자동으로 플레이어 링크가 생깁니다. -->
+<!-- 영상 · 표 만드는 법: HOWTO_media.md 0번 (make_demo · demo_table) -->
+
+**① 입력 영상 → 검출 · 추적 · 치수 추정**
 
 https://github.com/user-attachments/assets/[영상-링크]
 
+<sub>상자마다 추적 번호와 추정 치수(가로 × 세로 × 높이, cm)가 표시됩니다. 정답 치수는 회색으로 함께 표시.</sub>
+
+**② 트랙별 결과**
+
 <p align="center">
-  <img src="assets/result_visualization.png" width="95%"><br>
-  <sub>test 영상의 결과: 트랙마다 대표 crop과 가려짐(왼쪽), 같은 축척으로 그린 예측(주황) · 정답(초록 점선) 3D 상자(오른쪽)</sub>
+  <img src="assets/demo_result.png" width="95%"><br>
+  <sub>트랙마다 대표 crop과 가려짐(왼쪽), 같은 축척으로 그린 예측(주황) · 정답(초록 점선) 3D 상자(오른쪽)</sub>
+</p>
+
+**③ 측정값**
+
+<!-- demo_table()이 출력한 표로 바꾸기 -->
+| 트랙 | 추정 (cm) | 정답 (cm) | 오차 (cm) |
+|---|---|---|---|
+| T0 | __ × __ × __ | __ × __ × __ | __ |
+| … | | | |
+| **평균** | | | **__** |
+
+**④ 트럭 적재 최적화**
+
+<p align="center">
+  <img src="assets/binpack_example.png" width="95%"><br>
+  <sub>같은 영상의 상자 13개를 세 방식으로 실은 모습 (같은 축척): 들어온 순서대로 · 추정 치수로 계획 · 정답 치수로 계획</sub>
 </p>
 
 ## 📊 한눈에 보기
@@ -34,7 +53,7 @@ https://github.com/user-attachments/assets/[영상-링크]
 | 비교: OVMono3D-LIFT | 원본 8.68 cm · 레일 보정 6.81 cm · 레일 + 현장 데이터 fine tuning 3.44 cm |
 | **온라인 처리** | 상자가 ROI 중간을 지나는 순간(등장 후 중앙값 3.7초) 측정, test 오차 1.80 cm |
 | **런타임 (A100)** | 상자당 치수 추정 약 0.19초 · 전체 파이프라인 영상 길이의 0.26배 (고정 카메라) |
-| **적재 (bin packing)** | 적재 밀도 58.0% → **66.1%** (+8.0%p), 같은 상자를 약 14% 작은 공간에 적재 |
+| **트럭 적재 최적화** | 적재 밀도 58.0% → **66.1%** (+8.0%p), 같은 상자를 약 14% 작은 공간에 적재 |
 
 모든 모델 선택은 train · val로만 했고, 최종 모델로 test를 마지막에 한 번 평가했습니다.
 
@@ -53,7 +72,7 @@ https://github.com/user-attachments/assets/[영상-링크]
 ## 💡 방법: 크기를 셋으로 나눈다
 
 <p align="center">
-  <img src="assets/decomposition_scene.png" width="45%"> <img src="assets/decomposition_steps.png" width="45%">
+  <img src="assets/decomposition_scene.png" width="45%"> 
 </p>
 
 | 단계 | 계산 | |
@@ -159,11 +178,11 @@ https://github.com/user-attachments/assets/[영상-링크]
   <sub>런타임 (A100) — 배치 처리로 상자당 시간 5.6배 감소, 전체 파이프라인도 영상 길이보다 빠름</sub>
 </p>
 
-## 📦 적재 계획 (bin packing)
+## 📦 트럭 적재 최적화 (3D bin packing)
+
+추정한 치수로 상자를 싣는 순서와 구역을 정하고, 실제 치수의 상자로 실었을 때 차지하는 공간을 비교했습니다 (미검출 상자 · 정답 없는 트랙 포함).
 
 <p align="center">
-  <img src="assets/binpack_example.png" width="95%"><br>
-  <sub>같은 상자 13개를 세 방식으로 실은 모습 (같은 축척)</sub><br><br>
   <img src="assets/binpack_density.png" width="60%"><br>
   <sub>test 적재 밀도 — 현행 58.0% → 제안 66.1% (정답 치수 상한 72.3%)</sub>
 </p>
@@ -178,7 +197,7 @@ https://github.com/user-attachments/assets/[영상-링크]
 | `04_sizing_ablation` | 단계별 개선 (0 ~ 8단계) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/notebooks/04_sizing_ablation.ipynb) |
 | `05_sizing_failure_analysis` | 실패 사례 분석 | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/notebooks/05_sizing_failure_analysis.ipynb) |
 | `06_sizing_online_realtime` | 온라인 처리 | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/notebooks/06_sizing_online_realtime.ipynb) |
-| `07_binpacking` | 적재 계획 | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/notebooks/07_binpacking.ipynb) |
+| `07_binpacking` | 트럭 적재 최적화 (3D bin packing) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/notebooks/07_binpacking.ipynb) |
 
 ```
 .
