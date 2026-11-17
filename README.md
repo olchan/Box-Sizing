@@ -18,7 +18,9 @@
 
 **① 실시간 처리 영상** — 0.1초마다 들어오는 프레임을 한 장씩 처리하고, 상자가 종료선(파란 선)을 지나는 순간 치수를 냅니다.
 
-https://github.com/user-attachments/assets/[영상-링크]
+
+https://github.com/user-attachments/assets/6b83b3b6-b371-4793-bb71-3a92f14f7629
+
 
 <sub>회색 = 추적 중 · 노랑 = 측정 중 · 초록 = 치수 나옴 (정답과 비교) · 주황 = 치수 나옴, 정답 없는 트랙 · 점선 사각형 = ROI</sub>
 
