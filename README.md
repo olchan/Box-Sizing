@@ -4,7 +4,7 @@
 
 **기하 스케일 분리와 형태비 학습에 기반한 단안 CCTV 화물 치수 추정**
 
-소프트웨어융합 캡스톤디자인 · [이름] · 지도교수 [교수명] · 2026
+소프트웨어융합 캡스톤디자인 · 이찬  · 2026
 
 <!-- 배지: GitHub 아이디/저장소 이름으로 바꾸기 -->
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/notebooks/03_sizing_MAIN_offline_test.ipynb)
