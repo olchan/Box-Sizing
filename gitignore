@@ -1,0 +1,16 @@
+# 데이터 · 캐시 · 대용량 가중치 (Releases로 배포)
+Dataset/
+cache/
+outputs/
+*.mp4
+*.npz
+*.pkl
+*.pt
+*.onnx
+*.onnx.data
+*.safetensors
+# Colab · Python
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+.DS_Store

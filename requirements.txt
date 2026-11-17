@@ -1,0 +1,7 @@
+# Colab 기본 패키지(torch, numpy, pandas, matplotlib, opencv-python, scipy) 외에 필요한 것
+timm>=1.0.20
+ultralytics
+openpyxl
+filterpy
+# Depth Anything 3: 노트북 첫 셀에서 --no-deps로 설치
+# 3D bin packing: git clone https://github.com/jerry800416/3D-bin-packing (커밋 75764a2)
