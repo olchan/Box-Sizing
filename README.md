@@ -5,7 +5,7 @@
 **기하 스케일 분리와 형태비 학습에 기반한 단안 CCTV 화물 치수 추정**
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/olchan/Box-Sizing/blob/main/03_sizing_MAIN_offline_test.ipynb)
-&nbsp;[📄 최종 보고서](docs/report.pdf)
+&nbsp;[📄 최종 보고서](캡스톤디자인 최종 보고서 이찬.pdf)
 
 </div>
 
