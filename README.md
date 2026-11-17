@@ -218,20 +218,26 @@ https://github.com/user-attachments/assets/6b83b3b6-b371-4793-bb71-3a92f14f7629
 
 | 노트북 | 내용 | Colab |
 |---|---|---|
-| `01_baseline_CubeRCNN_detection` | 기존 방법 1: Cube R-CNN | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/notebooks/01_baseline_CubeRCNN_detection.ipynb) |
-| `02_baseline_OVMono3D_LIFT` | 기존 방법 2: OVMono3D-LIFT | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/notebooks/02_baseline_OVMono3D_LIFT.ipynb) |
-| **`03_sizing_MAIN_offline_test`** | **최종 모델: 학습 · 추론 · test 채점 · 런타임** | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/notebooks/03_sizing_MAIN_offline_test.ipynb) |
-| `04_sizing_ablation` | 단계별 개선 (0 ~ 8단계) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/notebooks/04_sizing_ablation.ipynb) |
-| `05_sizing_failure_analysis` | 실패 사례 분석 | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/notebooks/05_sizing_failure_analysis.ipynb) |
-| `06_sizing_online_realtime` | 온라인 처리 | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/notebooks/06_sizing_online_realtime.ipynb) |
-| `07_binpacking` | 트럭 적재 최적화 (3D bin packing) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/notebooks/07_binpacking.ipynb) |
+| `01_baseline_CubeRCNN_detection` | 기존 방법 1: Cube R-CNN | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/01_baseline_CubeRCNN_detection.ipynb) |
+| `02_baseline_OVMono3D_LIFT` | 기존 방법 2: OVMono3D-LIFT | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/02_baseline_OVMono3D_LIFT.ipynb) |
+| **`03_sizing_MAIN_offline_test`** | **최종 모델: 학습 · 추론 · test 채점 · 런타임** | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/03_sizing_MAIN_offline_test.ipynb) |
+| `04_sizing_ablation` | 단계별 개선 (0 ~ 8단계) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/04_sizing_ablation.ipynb) |
+| `05_sizing_failure_analysis` | 실패 사례 분석 | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/05_sizing_failure_analysis.ipynb) |
+| `06_sizing_online_realtime` | 온라인 처리 | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/06_sizing_online_realtime.ipynb) |
+| `07_binpacking` | 트럭 적재 최적화 (3D bin packing) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/07_binpacking.ipynb) |
 
 ```
-.
-├── notebooks/        # 위 7개 노트북
-├── assets/           # README 그림 · 영상(GIF)
-├── docs/report.pdf   # 최종 보고서
+├── 01_baseline_CubeRCNN_detection.ipynb   # 기존 방법 1: Cube R-CNN
+├── 02_baseline_OVMono3D_LIFT.ipynb        # 기존 방법 2: OVMono3D-LIFT
+├── 03_sizing_MAIN_offline_test.ipynb      # ★ 최종 모델: 학습 · 추론 · test 채점 · 런타임
+├── 04_sizing_ablation.ipynb               # 단계별 개선 (0 ~ 8단계)
+├── 05_sizing_failure_analysis.ipynb       # 실패 사례 분석
+├── 06_sizing_online_realtime.ipynb        # 온라인 처리
+├── 07_binpacking.ipynb                    # 트럭 적재 최적화 (3D bin packing)
+├── assets/                                # README 그림
+├── docs/                                  # 최종 보고서
 ├── requirements.txt
+├── LICENSE
 └── README.md
 ```
 
