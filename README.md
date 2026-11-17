@@ -4,8 +4,7 @@
 
 **기하 스케일 분리와 형태비 학습에 기반한 단안 CCTV 화물 치수 추정**
 
-<!-- 배지: GitHub 아이디/저장소 이름으로 바꾸기 -->
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/notebooks/03_sizing_MAIN_offline_test.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/olchan/Box-Sizing/blob/main/03_sizing_MAIN_offline_test.ipynb)
 &nbsp;[📄 최종 보고서](docs/report.pdf)
 
 </div>
@@ -14,7 +13,7 @@
 
 ## 🎬 데모 — 영상 하나로 처음부터 끝까지 (test_005)
 
-test 영상 중 상자 11개가 지나가는 test_005 하나로 **실시간 측정 → 상자별 결과 → 트럭 적재**까지 따라갑니다. 이 영상의 평균 치수 오차(1.62 cm)는 test 전체 평균(온라인 1.80 cm · 오프라인 1.75 cm)과 비슷한 전형적인 예시입니다.
+test 영상 중 상자 11개가 지나가는 test_005 하나로 **실시간 측정 → 상자별 결과 → 트럭 적재**까지 따라갑니다. 치수 오차가 test 전체 평균과 비슷한 전형적인 예시입니다.
 
 **① 실시간 처리 영상** — 0.1초마다 들어오는 프레임을 한 장씩 처리하고, 상자가 종료선(파란 선)을 지나는 순간 치수를 냅니다.
 
@@ -22,55 +21,26 @@ https://github.com/user-attachments/assets/6b83b3b6-b371-4793-bb71-3a92f14f7629
 
 <sub>회색 = 추적 중 · 노랑 = 측정 중 · 초록 = 치수 나옴 (정답과 비교) · 주황 = 치수 나옴, 정답 없는 트랙 · 점선 사각형 = ROI</sub>
 
-**② 상자별 결과 (온라인 처리)**
+**② 상자별 측정 결과**
 
 <p align="center">
   <img src="assets/demo_online_boxes.png" width="95%"><br>
-  <sub>상자마다 치수 추정에 쓴 프레임 중 가려짐이 가장 적은 crop(왼쪽), 같은 축척으로 그린 예측(주황) · 정답(초록 점선) 3D 상자와 결과가 나온 시각(오른쪽)</sub>
+  <sub>상자마다 치수 추정에 쓴 프레임 중 가려짐이 가장 적은 crop(왼쪽)과, 같은 축척으로 그린 예측(주황) · 정답(초록 점선) 3D 상자(오른쪽)</sub>
 </p>
 
-| 트랙 | 처음 보임 (s) | 치수 나옴 (s) | 등장 → 결과 (s) | 예측 w×d×h (cm) | 정답 w×d×h (cm) | 치수 오차 (cm) |
-|:---:|---:|---:|---:|:---:|:---:|---:|
-| T0 | 0.2 | 6.2 | 6.0 | 42×39×19 | 43×40×19 | 0.92 |
-| T1 | 1.3 | 7.3 | 6.0 | 34×42×24 | 33×46×23 | 1.90 |
-| T2 | 3.1 | 8.3 | 5.2 | 20×22×13 | 19×24×14 | 1.21 |
-| T3 | 4.0 | 9.3 | 5.3 | 19×11×9 | 18×14×9 | 1.30 |
-| T4 | 4.1 | 10.2 | 6.1 | 19×20×15 | 19×25×13 | 2.17 |
-| T5 | 5.1 | 11.1 | 6.0 | 20×22×9 | 20×26×7 | 1.96 |
-| T6 | 5.5 | 12.2 | 6.7 | 19×39×13 | 19×39×12 | 0.69 |
-| T7 | 6.6 | 13.4 | 6.8 | 28×32×12 | 28×39×12 | 2.79 |
-| T8 | 7.1 | 16.7 | 9.6 | 30×61×23 | 29×68×21 | 2.96 |
-| T9 | 9.4 | 16.7 | 7.3 | 24×29×15 | 24×31×17 | 1.40 |
-| T10 | 10.8 | 16.7 | 5.9 | 28×24×17 | 28×25×17 | 0.49 |
-| **평균** | | | **6.5** | | | **1.62** |
-
-<sub>T8 · T9 · T10은 영상이 끝날 때까지 종료선을 지나지 않아, 영상 끝(16.7초)에 그때까지 모인 프레임으로 측정했습니다.</sub>
-
-**③ 트럭 적재 최적화**
-
-<p align="center">
-  <img src="assets/demo_binpack.png" width="95%"><br>
-  <sub>같은 상자 11개(부피 합 174 L)를 세 방식으로 실은 모습 (같은 축척) — 숫자 · 색 = 들어온 순서, 빨간 점선 = 차지한 공간</sub>
-</p>
-
-| 적재 방식 | 적재 밀도 | 차지한 공간 |
-|---|---:|---:|
-| 현행 (들어온 순서대로) | 48.2% | 361 L |
-| **추정 치수로 계획** (여유 +10%) | **65.4%** | **266 L** |
-| 정답 치수로 계획 (상한) | 78.5% | 222 L |
-
-추정 치수로 계획하면 같은 상자를 현행보다 **26% 작은 공간**(361 → 266 L)에 실었습니다.
-
-<details>
-<summary><b>적재 계획에 쓴 상자별 치수 (펼치기)</b></summary>
+**③ 적재 계획에 쓴 치수**
 
 <p align="center">
   <img src="assets/demo_binpack_boxes.png" width="95%"><br>
-  <sub>상자별 정답(색 채운 상자) vs 추정(검은 점선) — 번호 · 색은 ③과 같은 상자, 평균 오차 1.56 cm</sub>
+  <sub>상자별 정답(색 채운 상자)과 추정 치수(검은 점선) — 번호 · 색은 ④와 같은 상자</sub>
 </p>
 
-적재 계획은 영상 전체를 본 오프라인 최종 모델의 치수(평균 오차 1.56 cm)를 썼습니다. 그래서 ②의 온라인 측정값과 조금 다릅니다.
-</details>
+**④ 트럭 적재 최적화**
+
+<p align="center">
+  <img src="assets/demo_binpack.png" width="95%"><br>
+  <sub>같은 상자를 세 방식으로 실은 모습 (같은 축척): 들어온 순서대로 · 추정 치수로 계획 · 정답 치수로 계획 — 숫자 · 색 = 들어온 순서, 빨간 점선 = 차지한 공간</sub>
+</p>
 
 ## 📊 한눈에 보기
 
@@ -115,7 +85,7 @@ https://github.com/user-attachments/assets/6b83b3b6-b371-4793-bb71-3a92f14f7629
 </p>
 
 <details>
-<summary><b>검출 · 추적 · 레일 (펼치기)</b></summary>
+<summary><b>검출 · 추적 · 레일</b></summary>
 
 <p align="center">
   <img src="assets/yolo_labels.png" width="95%"><br>
@@ -153,7 +123,7 @@ https://github.com/user-attachments/assets/6b83b3b6-b371-4793-bb71-3a92f14f7629
 | 8 | 두 head를 함께 학습하면? | 개선 없음 → 분리 학습 유지 |
 
 <details>
-<summary><b>근거 실험 그림 (펼치기)</b></summary>
+<summary><b>근거 실험 그림</b></summary>
 
 | | |
 |---|---|
@@ -171,7 +141,7 @@ https://github.com/user-attachments/assets/6b83b3b6-b371-4793-bb71-3a92f14f7629
 </p>
 
 <details>
-<summary><b>기존 방법은 왜 안 되나 (펼치기)</b></summary>
+<summary><b>기존 방법은 왜 안 되나</b></summary>
 
 <p align="center">
   <img src="assets/baseline_cubercnn.png" width="95%"><br>
@@ -185,7 +155,7 @@ https://github.com/user-attachments/assets/6b83b3b6-b371-4793-bb71-3a92f14f7629
 </details>
 
 <details>
-<summary><b>구간별 성능 · 남은 오차 · 실패 사례 (펼치기)</b></summary>
+<summary><b>구간별 성능 · 남은 오차 · 실패 사례</b></summary>
 
 <p align="center">
   <img src="assets/test_bins.png" width="95%"><br><sub>test 구간별 성능 (95% CI)</sub><br><br>
@@ -218,13 +188,13 @@ https://github.com/user-attachments/assets/6b83b3b6-b371-4793-bb71-3a92f14f7629
 
 | 노트북 | 내용 | Colab |
 |---|---|---|
-| `01_baseline_CubeRCNN_detection` | 기존 방법 1: Cube R-CNN | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/01_baseline_CubeRCNN_detection.ipynb) |
-| `02_baseline_OVMono3D_LIFT` | 기존 방법 2: OVMono3D-LIFT | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/02_baseline_OVMono3D_LIFT.ipynb) |
-| **`03_sizing_MAIN_offline_test`** | **최종 모델: 학습 · 추론 · test 채점 · 런타임** | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/03_sizing_MAIN_offline_test.ipynb) |
-| `04_sizing_ablation` | 단계별 개선 (0 ~ 8단계) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/04_sizing_ablation.ipynb) |
-| `05_sizing_failure_analysis` | 실패 사례 분석 | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/05_sizing_failure_analysis.ipynb) |
-| `06_sizing_online_realtime` | 온라인 처리 | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/06_sizing_online_realtime.ipynb) |
-| `07_binpacking` | 트럭 적재 최적화 (3D bin packing) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/07_binpacking.ipynb) |
+| `01_baseline_CubeRCNN_detection` | 기존 방법 1: Cube R-CNN | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/olchan/Box-Sizing/blob/main/01_baseline_CubeRCNN_detection.ipynb) |
+| `02_baseline_OVMono3D_LIFT` | 기존 방법 2: OVMono3D-LIFT | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/olchan/Box-Sizing/blob/main/02_baseline_OVMono3D_LIFT.ipynb) |
+| **`03_sizing_MAIN_offline_test`** | **최종 모델: 학습 · 추론 · test 채점 · 런타임** | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/olchan/Box-Sizing/blob/main/03_sizing_MAIN_offline_test.ipynb) |
+| `04_sizing_ablation` | 단계별 개선 (0 ~ 8단계) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/olchan/Box-Sizing/blob/main/04_sizing_ablation.ipynb) |
+| `05_sizing_failure_analysis` | 실패 사례 분석 | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/olchan/Box-Sizing/blob/main/05_sizing_failure_analysis.ipynb) |
+| `06_sizing_online_realtime` | 온라인 처리 | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/olchan/Box-Sizing/blob/main/06_sizing_online_realtime.ipynb) |
+| `07_binpacking` | 트럭 적재 최적화 (3D bin packing) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/olchan/Box-Sizing/blob/main/07_binpacking.ipynb) |
 
 ```
 ├── 01_baseline_CubeRCNN_detection.ipynb   # 기존 방법 1: Cube R-CNN
@@ -241,11 +211,10 @@ https://github.com/user-attachments/assets/6b83b3b6-b371-4793-bb71-3a92f14f7629
 └── README.md
 ```
 
-## ⚙️ 실행 환경 · 데이터 · 가중치
+## ⚙️ 실행 환경 · 데이터 
 
 - Google Colab GPU 런타임 (L4 또는 A100), Python 3.13, PyTorch 2.11, `timm>=1.0.20`, `ultralytics`
-- **데이터**는 저장소에 포함하지 않습니다. [데이터 출처 · 이용 조건] 각 노트북 첫 셀의 `ROOT` 경로만 바꾸면 됩니다.
-- **가중치**: 직접 학습한 YOLO(검출 · 레일 분할)와 최종 head(5-fold)는 [Releases](https://github.com/[USER]/Box-Sizing/releases)에서 받아 `checkpoints/`에 둡니다. DINOv3 · Depth Anything 3는 노트북이 공식 경로에서 자동으로 받습니다.
+- 데이터와 직접 학습한 가중치는 공개하지 않습니다. DINOv3 · Depth Anything 3는 노트북이 공식 경로에서 자동으로 받습니다.
 
 ## ⚠️ 한계
 
@@ -255,15 +224,15 @@ https://github.com/user-attachments/assets/6b83b3b6-b371-4793-bb71-3a92f14f7629
 
 ## 📚 참고
 
-* Cube R-CNN: Brazil, G., Habermann, M., Habermann, C., & Leibe, B. (2023). **Cube R-CNN: 3D Object Detection for Multi-View and Monocular Images**. *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)*, pp. 20491-20501. [🔗 Paper](https://www.google.com/search?q=https://openaccess.thecvf.com/content/CVPR2023/html/Brazil_Cube_R-CNN_3D_Object_Detection_for_Multi-View_and_Monocular_Images_CVPR_2023_paper.html)
-* OVMono3D: Yao, Y., et al. (2024). **OVMono3D: Open-Vocabulary Monocular 3D Object Detection**. *arXiv preprint arXiv:2411.16833*. [🔗 arXiv](https://arxiv.org/abs/2411.16833)
-* DINOv3: Siméoni, O., et al. (2025). **DINOv3: Robust Visual Self-Supervised Learning for Dense and Generative Vision**. *arXiv preprint / Meta AI Research*. [🔗 Web](https://ai.meta.com/) *(또는 관련 공식 발표 링크)*
-* Depth Anything 3: Lin, L., et al. (2025). **Depth Anything 3: Scaling Robust Monocular Depth Estimation and Beyond**. *arXiv preprint / Project Website*. [🔗 GitHub](https://github.com/DepthAnything/Depth-Anything-3) *(공식 저장소 기준)*
-* ByteTrack: Zhang, Y., Sun, P., Jiang, Y., Yu, D., Weng, F., Yuan, Z., Luo, P., W Liu, W., & Wang, X. (2022). **ByteTrack: Multi-Object Tracking by Associating Every Detection Box**. *European Conference on Computer Vision (ECCV)*, pp. 1-21. [🔗 GitHub](https://www.google.com/search?q=https://github.com/ifzhang/ByteTrack)
-* 3D-bin-packing: jerry800416. (n.d.). **3D-bin-packing: Python Library for 3D Bin Packing Problem / Py3DBP**. *GitHub Repository*. [🔗 GitHub](https://github.com/jerry800416/3D-bin-packing)
+* **Cube R-CNN (Omni3D):** Brazil, G., Kumar, A., Straub, J., Ravi, N., Johnson, J., & Gkioxari, G. (2023). Omni3D: A Large Benchmark and Model for 3D Object Detection in the Wild. *CVPR 2023*. [🔗 GitHub](https://github.com/facebookresearch/omni3d)
+* **OVMono3D:** Yao, J., Gu, H., Chen, X., Wang, J., & Cheng, Z. (2024). Open Vocabulary Monocular 3D Object Detection. *arXiv:2411.16833*. [🔗 arXiv](https://arxiv.org/abs/2411.16833)
+* **DINOv3:** Siméoni, O., et al. (2025). DINOv3. *arXiv preprint*. [🔗 GitHub](https://github.com/facebookresearch/dinov3)
+* **Depth Anything 3:** Lin, H., et al. (2025). Depth Anything 3. *arXiv preprint*. [🔗 GitHub](https://github.com/ByteDance-Seed/Depth-Anything-3)
+* **ByteTrack:** Zhang, Y., Sun, P., Jiang, Y., Yu, D., Weng, F., Yuan, Z., Luo, P., Liu, W., & Wang, X. (2022). ByteTrack: Multi-Object Tracking by Associating Every Detection Box. *ECCV 2022*. [🔗 GitHub](https://github.com/ifzhang/ByteTrack)
+* **3D-bin-packing:** jerry800416. 3D-bin-packing (Python 3D bin packing library). [🔗 GitHub](https://github.com/jerry800416/3D-bin-packing)
 
 ---
 
 ## 📄 라이선스
 
-코드: [MIT]. 기반 모델(DINOv3, Depth Anything 3, YOLO)은 각 라이선스를 따릅니다.
+코드: MIT. 기반 모델(DINOv3, Depth Anything 3, YOLO)은 각 라이선스를 따릅니다.
