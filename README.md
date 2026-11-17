@@ -4,6 +4,8 @@
 
 **기하 스케일 분리와 형태비 학습에 기반한 단안 CCTV 화물 치수 추정**
 
+소프트웨어융합 캡스톤디자인 · [이름] · 지도교수 [교수명] · 2026
+
 <!-- 배지: GitHub 아이디/저장소 이름으로 바꾸기 -->
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/notebooks/03_sizing_MAIN_offline_test.ipynb)
 &nbsp;[📄 최종 보고서](docs/report.pdf)
@@ -14,31 +16,26 @@
 
 ## 🎬 데모 — 영상 하나로 처음부터 끝까지 (test_033)
 
-<!-- 영상 · 표 만드는 법: HOWTO_media.md 0번 (make_demo · demo_table) -->
-
-**① 입력 영상 → 검출 · 추적 · 치수 추정**
+**① 실시간 처리 영상** — 0.1초마다 들어오는 프레임을 한 장씩 처리하고, 상자가 종료선(파란 선)을 지나는 순간 치수를 냅니다.
 
 https://github.com/user-attachments/assets/[영상-링크]
 
-<sub>상자마다 추적 번호와 추정 치수(가로 × 세로 × 높이, cm)가 표시됩니다. 정답 치수는 회색으로 함께 표시.</sub>
+<sub>회색 = 추적 중 · 노랑 = 측정 중 · 초록 = 치수 나옴 (정답과 비교) · 주황 = 치수 나옴, 정답 없는 트랙 · 점선 사각형 = ROI</sub>
 
-**② 트랙별 결과**
+**② 상자별 결과**
 
 <p align="center">
-  <img src="assets/demo_result.png" width="95%"><br>
-  <sub>트랙마다 대표 crop과 가려짐(왼쪽), 같은 축척으로 그린 예측(주황) · 정답(초록 점선) 3D 상자(오른쪽)</sub>
+  <img src="assets/demo_online_boxes.png" width="95%"><br>
+  <sub>상자마다 치수 추정에 쓴 프레임 중 가려짐이 가장 적은 crop(왼쪽), 같은 축척으로 그린 예측(주황) · 정답(초록 점선) 3D 상자와 결과가 나온 시각(오른쪽)</sub>
 </p>
 
-**③ 측정값**
+<!-- [O-5]가 출력한 상자별 표: print(TBL_O.round(2).to_markdown()) 결과로 바꾸기 -->
+| 트랙 | 등장 → 결과 (s) | 예측 w×d×h (cm) | 정답 w×d×h (cm) | 치수 오차 (cm) |
+|---|---|---|---|---|
+| T0 | __ | __ | __ | __ |
+| … | | | | |
 
-<!-- demo_table()이 출력한 표로 바꾸기 -->
-| 트랙 | 추정 (cm) | 정답 (cm) | 오차 (cm) |
-|---|---|---|---|
-| T0 | __ × __ × __ | __ × __ × __ | __ |
-| … | | | |
-| **평균** | | | **__** |
-
-**④ 트럭 적재 최적화**
+**③ 트럭 적재 최적화**
 
 <p align="center">
   <img src="assets/binpack_example.png" width="95%"><br>
@@ -72,7 +69,7 @@ https://github.com/user-attachments/assets/[영상-링크]
 ## 💡 방법: 크기를 셋으로 나눈다
 
 <p align="center">
-  <img src="assets/decomposition_scene.png" width="45%"> 
+  <img src="assets/decomposition_scene.png" width="45%">
 </p>
 
 | 단계 | 계산 | |
