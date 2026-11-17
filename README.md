@@ -4,8 +4,6 @@
 
 **기하 스케일 분리와 형태비 학습에 기반한 단안 CCTV 화물 치수 추정**
 
-소프트웨어융합 캡스톤디자인 · [이름] · 지도교수 [교수명] · 2026
-
 <!-- 배지: GitHub 아이디/저장소 이름으로 바꾸기 -->
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/[USER]/Box-Sizing/blob/main/notebooks/03_sizing_MAIN_offline_test.ipynb)
 &nbsp;[📄 최종 보고서](docs/report.pdf)
@@ -14,7 +12,7 @@
 
 일반 CCTV 한 대의 영상과 렌즈 focal만으로 컨베이어 위 상자의 **가로 · 세로 · 높이(w · d · h)** 를 추정하고, 추정한 치수로 **트럭 적재를 최적화**합니다 (3D bin packing).
 
-## 🎬 데모 — 영상 하나로 처음부터 끝까지 (test_033)
+## 🎬 데모 — 영상 하나로 처음부터 끝까지 (test_005)
 
 **① 실시간 처리 영상** — 0.1초마다 들어오는 프레임을 한 장씩 처리하고, 상자가 종료선(파란 선)을 지나는 순간 치수를 냅니다.
 
