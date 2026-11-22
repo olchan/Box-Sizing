@@ -5,7 +5,7 @@
 **기하 스케일 분리와 형태비 학습에 기반한 단안 CCTV 화물 치수 추정**
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/olchan/Box-Sizing/blob/main/03_sizing_MAIN_offline_test.ipynb)
-&nbsp;[📄 최종 보고서](캡스톤디자인_최종보고서_이찬.docx)
+&nbsp;[📄 최종 보고서](캡스톤디자인_최종보고서_이찬.pdf)
 
 </div>
 
@@ -241,7 +241,8 @@ https://github.com/user-attachments/assets/6b83b3b6-b371-4793-bb71-3a92f14f7629
 ├── 05_sizing_failure_analysis.ipynb       # 실패 분석: 가림 · 형태 · 실제 영상 사례
 ├── 06_sizing_online_realtime.ipynb        # 온라인 처리
 ├── 07_binpacking.ipynb                    # 트럭 적재 최적화 (3D bin packing)
-├── 캡스톤디자인_최종보고서_이찬.docx        # 최종 보고서
+├── 캡스톤디자인_최종보고서_이찬.pdf         # 최종 보고서 (PDF, 브라우저에서 바로 보기)
+├── 캡스톤디자인_최종보고서_이찬.docx        # 최종 보고서 (Word 원본)
 ├── assets/                                # README 그림
 ├── requirements.txt
 ├── LICENSE
