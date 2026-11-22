@@ -5,7 +5,7 @@
 **기하 스케일 분리와 형태비 학습에 기반한 단안 CCTV 화물 치수 추정**
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/olchan/Box-Sizing/blob/main/03_sizing_MAIN_offline_test.ipynb)
-&nbsp;[📄 최종 보고서](캡스톤디자인%20최종보고서%20이찬.pdf)
+&nbsp;[📄 최종 보고서](캡스톤디자인_최종보고서_이찬.docx)
 
 </div>
 
@@ -166,14 +166,35 @@ https://github.com/user-attachments/assets/6b83b3b6-b371-4793-bb71-3a92f14f7629
 </details>
 
 <details>
-<summary><b>구간별 성능 · 남은 오차 · 실패 사례</b></summary>
+<summary><b>구간별 성능 · 남은 오차</b></summary>
 
 <p align="center">
   <img src="assets/test_bins.png" width="95%"><br><sub>test 구간별 성능 (95% CI)</sub><br><br>
-  <img src="assets/error_share.png" width="70%"><br><sub>남은 오차의 분해</sub><br><br>
-  <img src="assets/failure_analysis.png" width="95%"><br><sub>실패 사례 분석 — 큰 오차의 대부분은 bbox가 상자의 실제 범위와 다를 때</sub>
+  <img src="assets/error_share.png" width="70%"><br><sub>남은 오차의 분해 — 남은 오차의 절반 가까이가 가로 w</sub>
 </p>
 </details>
+
+## 🔍 실패 분석: 언제 크게 틀리나
+
+상자별 오차는 중앙값 1.36 cm로 대부분 작지만, **오차 상위 10%(≥ 3 cm)가 전체 오차의 30%** 를 차지합니다. 이 실패가 언제 생기는지 최종 모델을 그대로 두고 분석했습니다 (모든 결과는 val에서도 같은 경향).
+
+**가림 — 한 장은 나빠지지만, 여러 장이 흡수한다.** 앞 상자에 절반 넘게 가린 프레임 한 장으로 재면 2.74 cm로 커지고, 같은 상자를 많이 가린 3장으로 재면 덜 가린 3장보다 +0.27 cm [+0.15, +0.38] 나빠집니다. 그러나 가림 적은 프레임을 여러 장 쓰면 1장 1.97 → 8장 1.74 cm로 줄어, 최종 결과에서는 가림의 영향이 대부분 흡수됩니다.
+
+<p align="center">
+  <img src="assets/failure_occlusion.png" width="95%"><br>
+  <sub>(a) 프레임 한 장의 가림 구간별 오차 (b) 같은 상자를 3장씩 (c) 쓴 프레임 수</sub><br><br>
+  <img src="assets/failure_occlusion_example.png" width="95%"><br>
+  <sub>같은 상자를 덜 가린 프레임 · 많이 가린 프레임으로 잰 예 (초록 = 잰 상자, 빨강 = 앞 상자)</sub>
+</p>
+
+**형태 — 아주 납작하거나 길쭉한 상자가 어렵다.** 납작함(짧은 변 ÷ 긴 변) < 0.3인 상자는 2.60 cm, 길쭉한 상자는 2.32 cm로 나머지(1.41 ~ 1.83 cm)보다 크고, 축별로는 세로 d가 가장 많이 틀립니다. 가림 없이 잘 보이는 긴 상자도 긴 변을 짧게 잽니다.
+
+<p align="center">
+  <img src="assets/failure_shape.png" width="95%"><br>
+  <sub>(a) 납작함 (b) 길쭉함 구간별 오차 (c) 축별 오차</sub>
+</p>
+
+**짧은 트랙 — 흡수가 안 되는 경우.** 가려져 잠깐만 보이고 끊긴 트랙은 쓸 프레임이 적어, 8장을 쓴 상자(1.63 cm)와 달리 1 ~ 2장만 쓴 상자는 5.28 cm였습니다. 형태 · 가림을 함께 넣은 다변수 회귀에서도 test · val 모두 유의한 요인은 쓴 프레임 수와 길쭉함이었습니다.
 
 ## ⚡ 온라인 처리와 런타임
 
@@ -208,7 +229,7 @@ https://github.com/user-attachments/assets/6b83b3b6-b371-4793-bb71-3a92f14f7629
 | `02_baseline_OVMono3D_LIFT` | 기존 방법 2: OVMono3D-LIFT | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/olchan/Box-Sizing/blob/main/02_baseline_OVMono3D_LIFT.ipynb) |
 | **`03_sizing_MAIN_offline_test`** | **최종 모델: 학습 · 추론 · test 채점 · 런타임** | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/olchan/Box-Sizing/blob/main/03_sizing_MAIN_offline_test.ipynb) |
 | `04_sizing_ablation` | 단계별 개선 (0 ~ 8단계) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/olchan/Box-Sizing/blob/main/04_sizing_ablation.ipynb) |
-| `05_sizing_failure_analysis` | 실패 사례 분석 | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/olchan/Box-Sizing/blob/main/05_sizing_failure_analysis.ipynb) |
+| `05_sizing_failure_analysis` | 실패 분석: 가림 · 형태 · 실제 영상 사례 | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/olchan/Box-Sizing/blob/main/05_sizing_failure_analysis.ipynb) |
 | `06_sizing_online_realtime` | 온라인 처리 | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/olchan/Box-Sizing/blob/main/06_sizing_online_realtime.ipynb) |
 | `07_binpacking` | 트럭 적재 최적화 (3D bin packing) | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/olchan/Box-Sizing/blob/main/07_binpacking.ipynb) |
 
@@ -217,10 +238,10 @@ https://github.com/user-attachments/assets/6b83b3b6-b371-4793-bb71-3a92f14f7629
 ├── 02_baseline_OVMono3D_LIFT.ipynb        # 기존 방법 2: OVMono3D-LIFT
 ├── 03_sizing_MAIN_offline_test.ipynb      # ★ 최종 모델: 학습 · 추론 · test 채점 · 런타임
 ├── 04_sizing_ablation.ipynb               # 단계별 개선 (0 ~ 8단계)
-├── 05_sizing_failure_analysis.ipynb       # 실패 사례 분석
+├── 05_sizing_failure_analysis.ipynb       # 실패 분석: 가림 · 형태 · 실제 영상 사례
 ├── 06_sizing_online_realtime.ipynb        # 온라인 처리
 ├── 07_binpacking.ipynb                    # 트럭 적재 최적화 (3D bin packing)
-├── 캡스톤디자인 최종보고서 이찬.pdf          # 최종 보고서
+├── 캡스톤디자인_최종보고서_이찬.docx        # 최종 보고서
 ├── assets/                                # README 그림
 ├── requirements.txt
 ├── LICENSE
@@ -234,9 +255,10 @@ https://github.com/user-attachments/assets/6b83b3b6-b371-4793-bb71-3a92f14f7629
 
 ## ⚠️ 한계
 
-- 합성 데이터에서만 검증 (실제 CCTV의 조명 · 압축 노이즈 · 렌즈 왜곡은 미확인)
+- **검출 · 측정 실패를 그 자리에서 알 수 없음** — 모델은 항상 값을 내고 오차 범위가 보증되지 않으며, 검출되지 않은 상자(test 476개 중 7개)는 실제로 실을 때에야 드러남 → 영상과 독립된 통과 감지로 상자 수 대조
+- **아주 납작하거나 길쭉한 상자와 가로 w** → 회전 bbox · 분할 마스크로 상자의 실제 모서리 방향 입력, 가려진 부분까지 추정하는 amodal 분할
+- **합성 데이터에서만 검증** — 실제 CCTV의 조명 · 압축 노이즈 · 렌즈 왜곡, 투명 · 반사 포장재(테이프 · 랩 · 광택 라벨)는 미확인 → 실제 물류 CCTV로 검증
 - 레일 폭을 기준물로 사용 — 레일이 보이고 폭을 알아야 함
-- bbox가 상자의 실제 범위와 다를 때(가려짐 · 잘림), 가로 w의 모호함, 납작한 상자가 남은 과제
 
 ## 📚 참고
 
